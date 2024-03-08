@@ -35,6 +35,31 @@ def list_banner(request):
     }
     return render(request, 'dashboard/banner/list.html', context)
 
+def banner_detail(request, id):
+    banner = models.Banner.objects.get(id=id)
+    context = {
+        'banner':banner
+    }
+    return render(request, 'dashboard/banner/detail.html', context)
+
+
+def banner_edit(request, id):
+    banner = models.Banner.objects.get(id=id)
+    if request.method == 'POST':
+        banner.title = request.POST['title']
+        banner.body = request.POST['body']
+        banner.save()
+        return redirect('banner_detail', banner.id)
+    context = {
+        'banner':banner
+    }
+    return render(request, 'dashboard/banner/edit.html', context)
+
+
+def banner_delete(request, id):
+    models.Banner.objects.get(id=id).delete()
+    return redirect('list_banner')
+
 def create_aboutus(request):
     if request.method == "POST":
         body = request.POST['body']
@@ -51,6 +76,31 @@ def list_aboutus(request):
     return render(request, 'dashboard/aboutus/list.html', context )
 
 
+
+def aboutus_detail(request,id):
+    aboutus = models.AboutUs.objects.get(id=id)
+    context = {
+        'aboutus':aboutus
+    }
+    return render(request, 'dashboard/aboutus/detail.html', context)
+
+
+def aboutus_edit(request, id):
+    aboutus = models.AboutUs.objects.get(id=id)
+    if request.method == 'POST':
+        aboutus.body = request.POST['body']
+        aboutus.save()
+    
+    context = {
+        'aboutus':aboutus
+    }
+    return render(request, 'dashboard/aboutus/edit.html', context)
+
+
+def aboutus_delete(request, id):
+    models.AboutUs.objects.get(id=id).delete()
+    return redirect('list_aboutus')
+    
 
 def create_service(request):
     if request.method == "POST":
@@ -72,3 +122,29 @@ def list_service(request):
     
 
     return render(request, 'dashboard/service/list.html', context)
+
+def service_detail(request, id):
+    service = models.Service.objects.get(id=id)
+    context = {
+        'service':service
+    }
+    return render(request, 'dashboard/service/detail.html', context)
+
+
+
+def service_edit(request, id):
+    service = models.Service.objects.get(id=id)
+    if request.method == 'POST':
+        service.name = request.POST['name']
+        service.body = request.POST['body']
+        service.icon = request.POST['icon']
+        return redirect( 'service_detail', service.id)
+    context = {
+        'service':service
+    }
+    return render(request, 'dashboard/service/edit.html', context)
+    
+def service_delete(request, id):
+    models.Service.objects.get(id=id).delete()
+    return redirect('list_service')
+
